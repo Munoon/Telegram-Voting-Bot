@@ -14,6 +14,8 @@ public class Key {
 
     private Long usedBy;
 
+    private Player votedFor;
+
     public Key(String key) {
         this.key = key;
     }
