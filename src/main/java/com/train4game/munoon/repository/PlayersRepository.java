@@ -6,9 +6,10 @@ import com.train4game.munoon.models.Player;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.annotation.PreDestroy;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -46,5 +47,26 @@ public class PlayersRepository {
             }
         }
         return null;
+    }
+
+    public List<Player> getSimplePlayers() {
+        List<Player> result = new ArrayList<>();
+        storage.forEach(result::addAll);
+        return result;
+    }
+
+    @PreDestroy
+    public void writeResults() throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("results.txt", "UTF-8");
+        List<Player> players = getSimplePlayers();
+        players.sort(Comparator.comparingInt(Player::getVotes).reversed());
+
+        for (Player player : players) {
+            String message = player.getName() + " - " + player.getVotes() + " votes";
+            System.out.println(message);
+            writer.println(message);
+        }
+
+        writer.close();
     }
 }
