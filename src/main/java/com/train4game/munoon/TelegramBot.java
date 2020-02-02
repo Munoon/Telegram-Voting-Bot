@@ -6,6 +6,7 @@ import com.train4game.munoon.messageParser.MessageParser;
 import com.train4game.munoon.messageParser.VoteParser;
 import com.train4game.munoon.repository.TelegramUserRepository;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+@Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingCommandBot {
     private TelegramSpamProtection spamProtection = new TelegramSpamProtection();
@@ -60,6 +62,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
                     .setChatId(chat.getId());
 
             if (chat.isGroupChat()) {
+                log.info("Attempt to use bot in group chat {}", chat.getId());
                 sendMessage.setText("Bot not working in group chat");
                 execute(sendMessage);
                 return;
@@ -68,6 +71,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
             Integer userId = update.getMessage().getFrom().getId();
             spamProtection.messageReceived(userId);
             if (!spamProtection.shouldProcess(userId)) {
+                log.info("Enabled spam protection on chat {}", chat.getId());
                 sendMessage.setText("Too much messages");
                 execute(sendMessage);
                 return;

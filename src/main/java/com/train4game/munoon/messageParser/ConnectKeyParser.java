@@ -6,6 +6,7 @@ import com.train4game.munoon.repository.KeysRepository;
 import com.train4game.munoon.repository.PlayersRepository;
 import com.train4game.munoon.repository.TelegramUserRepository;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class ConnectKeyParser implements MessageParser {
     private ReplyKeyboardMarkup playersButtons;
@@ -41,17 +43,20 @@ public class ConnectKeyParser implements MessageParser {
         Key key = keysRepository.getKey(message.getText());
 
         if (key == null) {
+            log.info("Not found key '{}' in chat {}", message.getText(), message.getChatId());
             sendMessage.setText("Key not found!");
             sender.execute(sendMessage);
             return;
         }
 
         if (key.isUsed() && key.getUsedBy() != userId) {
+            log.info("Key '{}' already used by other user, chat {}", key.getKey(), message.getChatId());
             sendMessage.setText("Key already used!");
             sender.execute(sendMessage);
             return;
         }
 
+        log.info("Ask user to make vote in chat {}", message.getChatId());
         telegramUserRepository.addKey(userId, key);
         sendMessage.setText("Success! Make vote!");
         sendMessage.setReplyMarkup(playersButtons);

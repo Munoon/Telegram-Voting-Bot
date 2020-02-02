@@ -6,12 +6,14 @@ import com.train4game.munoon.repository.PlayersRepository;
 import com.train4game.munoon.repository.TelegramUserRepository;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class VoteParser implements MessageParser {
@@ -29,6 +31,9 @@ public class VoteParser implements MessageParser {
 
         if (key.isUsed()) {
             key.getVotedFor().removeVote();
+            log.info("User in chat {} change vote to {}", message.getChatId(), player.getName());
+        } else {
+            log.info("User in chat {} voted for {}", message.getChatId(), player.getName());
         }
 
         key.setUsed(true);
