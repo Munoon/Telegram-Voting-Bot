@@ -1,0 +1,18 @@
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="bot.error.groupChat">Бот не работает в груповом чате.</entry>
+    <entry key="bot.error.spam">Пожалуйста, не отправляйте так много сообщений.</entry>
+
+    <entry key="commands.start.message">
+        Привет! Я бот для голосования!
+
+        Что бы проголосовать просто введите ключ. Затем у вас появяться кнопки - участники голосования. Просто нажмите по одной из них, чтобы отдать свой голос.
+    </entry>
+
+    <entry key="messages.connectKey.notFound">Ключ не найден!</entry>
+    <entry key="messages.connectKey.alreadyUsed">Ключ уже использован другим пользователем!</entry>
+    <entry key="messages.connectKey.makeVote">Отлично, теперь проголосуйте!</entry>
+
+    <entry key="messages.vote.success">Вы успешно проголосовали за {0}!</entry>
+    <entry key="messages.vote.changeVote">Вы успешно изменили голос на {0}!</entry>
+</properties>

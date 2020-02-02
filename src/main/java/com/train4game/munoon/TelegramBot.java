@@ -25,14 +25,16 @@ import java.util.List;
 public class TelegramBot extends TelegramLongPollingCommandBot {
     private TelegramSpamProtection spamProtection = new TelegramSpamProtection();
     private TelegramUserRepository userRepository;
+    private TelegramMessages telegramMessages;
     private BeanFactory beanFactory;
     private final String botToken;
 
-    public TelegramBot(Environment environment, TelegramUserRepository userRepository, BeanFactory beanFactory) {
+    public TelegramBot(Environment environment, TelegramUserRepository userRepository, TelegramMessages telegramMessages, BeanFactory beanFactory) {
         super(ApiContext.getInstance(DefaultBotOptions.class), false);
         this.botToken = environment.getRequiredProperty("telegram.token");
         this.userRepository = userRepository;
         this.beanFactory = beanFactory;
+        this.telegramMessages = telegramMessages.createWrapper("bot");
 
         register(beanFactory.getBean(StartCommand.class));
     }
@@ -63,7 +65,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
 
             if (chat.isGroupChat()) {
                 log.info("Attempt to use bot in group chat {}", chat.getId());
-                sendMessage.setText("Bot not working in group chat");
+                sendMessage.setText(telegramMessages.getProperty("error.groupChat"));
                 execute(sendMessage);
                 return;
             }
@@ -72,7 +74,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
             spamProtection.messageReceived(userId);
             if (!spamProtection.shouldProcess(userId)) {
                 log.info("Enabled spam protection on chat {}", chat.getId());
-                sendMessage.setText("Too much messages");
+                sendMessage.setText(telegramMessages.getProperty("error.spam"));
                 execute(sendMessage);
                 return;
             }

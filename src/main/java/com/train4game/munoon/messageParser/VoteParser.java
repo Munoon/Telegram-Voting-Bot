@@ -1,5 +1,6 @@
 package com.train4game.munoon.messageParser;
 
+import com.train4game.munoon.TelegramMessages;
 import com.train4game.munoon.models.Key;
 import com.train4game.munoon.models.Player;
 import com.train4game.munoon.repository.PlayersRepository;
@@ -13,12 +14,20 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @Component
 @AllArgsConstructor
 public class VoteParser implements MessageParser {
     private TelegramUserRepository telegramUserRepository;
     private PlayersRepository playersRepository;
+    private TelegramMessages messages;
+
+    @PostConstruct
+    public void setupMessages() {
+        messages = messages.createWrapper("messages.vote");
+    }
 
     @Override
     @SneakyThrows
@@ -29,10 +38,16 @@ public class VoteParser implements MessageParser {
 
         Key key = telegramUserRepository.getByUserId(userId);
 
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(message.getChatId())
+                .setReplyMarkup(new ReplyKeyboardRemove());
+
         if (key.isUsed()) {
             key.getVotedFor().removeVote();
+            sendMessage.setText(messages.getProperty("changeVote", player.getName()));
             log.info("User in chat {} change vote to {}", message.getChatId(), player.getName());
         } else {
+            sendMessage.setText(messages.getProperty("success", player.getName()));
             log.info("User in chat {} voted for {}", message.getChatId(), player.getName());
         }
 
@@ -42,8 +57,6 @@ public class VoteParser implements MessageParser {
 
         telegramUserRepository.removeKey(userId);
 
-        SendMessage sendMessage = new SendMessage(message.getChatId(), "Successful vote!")
-                .setReplyMarkup(new ReplyKeyboardRemove());
         sender.execute(sendMessage);
     }
 }

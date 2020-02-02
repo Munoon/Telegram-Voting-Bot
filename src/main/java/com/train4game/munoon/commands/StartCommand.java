@@ -1,5 +1,6 @@
 package com.train4game.munoon.commands;
 
+import com.train4game.munoon.TelegramMessages;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,15 +13,18 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 @Slf4j
 @Component
 public class StartCommand extends BotCommand {
-    public StartCommand() {
+    private TelegramMessages messages;
+
+    public StartCommand(TelegramMessages telegramMessages) {
         super("start", "Start command");
+        messages = telegramMessages.createWrapper("commands.start");
     }
 
     @Override
     @SneakyThrows
     public void execute(AbsSender sender, User user, Chat chat, String[] arguments) {
         log.info("Send start message to chat {}", chat.getId());
-        SendMessage message = new SendMessage(chat.getId(), "Start message");
+        SendMessage message = new SendMessage(chat.getId(), messages.getProperty("message"));
         sender.execute(message);
     }
 }

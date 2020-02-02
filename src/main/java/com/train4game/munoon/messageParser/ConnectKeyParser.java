@@ -1,5 +1,6 @@
 package com.train4game.munoon.messageParser;
 
+import com.train4game.munoon.TelegramMessages;
 import com.train4game.munoon.models.Key;
 import com.train4game.munoon.models.Player;
 import com.train4game.munoon.repository.KeysRepository;
@@ -26,11 +27,13 @@ public class ConnectKeyParser implements MessageParser {
     private TelegramUserRepository telegramUserRepository;
     private KeysRepository keysRepository;
     private PlayersRepository playersRepository;
+    private TelegramMessages telegramMessages;
 
-    public ConnectKeyParser(TelegramUserRepository telegramUserRepository, KeysRepository keysRepository, PlayersRepository playersRepository) {
+    public ConnectKeyParser(TelegramUserRepository telegramUserRepository, KeysRepository keysRepository, PlayersRepository playersRepository, TelegramMessages telegramMessages) {
         this.telegramUserRepository = telegramUserRepository;
         this.keysRepository = keysRepository;
         this.playersRepository = playersRepository;
+        this.telegramMessages = telegramMessages.createWrapper("messages.connectKey");
     }
 
     @Override
@@ -44,21 +47,21 @@ public class ConnectKeyParser implements MessageParser {
 
         if (key == null) {
             log.info("Not found key '{}' in chat {}", message.getText(), message.getChatId());
-            sendMessage.setText("Key not found!");
+            sendMessage.setText(telegramMessages.getProperty("notFound"));
             sender.execute(sendMessage);
             return;
         }
 
         if (key.isUsed() && key.getUsedBy() != userId) {
             log.info("Key '{}' already used by other user, chat {}", key.getKey(), message.getChatId());
-            sendMessage.setText("Key already used!");
+            sendMessage.setText(telegramMessages.getProperty("alreadyUsed"));
             sender.execute(sendMessage);
             return;
         }
 
         log.info("Ask user to make vote in chat {}", message.getChatId());
         telegramUserRepository.addKey(userId, key);
-        sendMessage.setText("Success! Make vote!");
+        sendMessage.setText(telegramMessages.getProperty("makeVote"));
         sendMessage.setReplyMarkup(playersButtons);
         sender.execute(sendMessage);
     }
