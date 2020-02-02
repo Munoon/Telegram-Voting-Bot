@@ -21,21 +21,21 @@ public class VoteParser implements MessageParser {
     @Override
     @SneakyThrows
     public void parse(AbsSender sender, Message message) {
-        Long chatId = message.getChatId();
+        int userId = message.getFrom().getId();
         Player player = playersRepository.getPlayer(message.getText());
         player.addVote();
 
-        Key key = telegramUserRepository.getByUserId(chatId);
+        Key key = telegramUserRepository.getByUserId(userId);
 
         if (key.isUsed()) {
             key.getVotedFor().removeVote();
         }
 
         key.setUsed(true);
-        key.setUsedBy(chatId);
+        key.setUsedBy(userId);
         key.setVotedFor(player);
 
-        telegramUserRepository.removeKey(chatId);
+        telegramUserRepository.removeKey(userId);
 
         SendMessage sendMessage = new SendMessage(message.getChatId(), "Successful vote!")
                 .setReplyMarkup(new ReplyKeyboardRemove());

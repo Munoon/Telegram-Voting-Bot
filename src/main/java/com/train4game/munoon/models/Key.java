@@ -12,7 +12,7 @@ public class Key {
 
     private boolean used;
 
-    private Long usedBy;
+    private int usedBy;
 
     private Player votedFor;
 

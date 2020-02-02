@@ -28,9 +28,9 @@ public class ConnectKeyParser implements MessageParser {
     @Override
     @SneakyThrows
     public void parse(AbsSender sender, Message message) {
-        Long chatId = message.getChatId();
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
+        sendMessage.setChatId(message.getChatId());
+        Integer userId = message.getFrom().getId();
 
         Key key = keysRepository.getKey(message.getText());
 
@@ -40,13 +40,13 @@ public class ConnectKeyParser implements MessageParser {
             return;
         }
 
-        if (key.isUsed() && !key.getUsedBy().equals(chatId)) {
+        if (key.isUsed() && key.getUsedBy() != userId) {
             sendMessage.setText("Key already used!");
             sender.execute(sendMessage);
             return;
         }
 
-        telegramUserRepository.addKey(chatId, key);
+        telegramUserRepository.addKey(userId, key);
         sendMessage.setText("Success! Make vote!");
         sendMessage.setReplyMarkup(getPlayersButtons());
         sender.execute(sendMessage);

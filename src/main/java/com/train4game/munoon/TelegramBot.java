@@ -38,7 +38,8 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
     @Override
     public void processNonCommandUpdate(Update update) {
         Message message = update.getMessage();
-        boolean containsConnectedKey = userRepository.containsConnectedKey(message.getChatId());
+        int userId = message.getFrom().getId();
+        boolean containsConnectedKey = userRepository.containsConnectedKey(userId);
         MessageParser messageParser;
 
         if (containsConnectedKey) {
@@ -64,8 +65,9 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
                 return;
             }
 
-            spamProtection.messageReceived(chat.getId());
-            if (!spamProtection.shouldProcess(chat.getId())) {
+            Integer userId = update.getMessage().getFrom().getId();
+            spamProtection.messageReceived(userId);
+            if (!spamProtection.shouldProcess(userId)) {
                 sendMessage.setText("Too much messages");
                 execute(sendMessage);
                 return;

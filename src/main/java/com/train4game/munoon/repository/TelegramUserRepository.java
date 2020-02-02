@@ -8,25 +8,25 @@ import java.util.Map;
 
 @Repository
 public class TelegramUserRepository {
-    private Map<Long, Key> storage; // <ChatId, Key>
+    private Map<Long, Key> storage; // <UserId, Key>
 
     public TelegramUserRepository() {
         storage = new HashMap<>();
     }
 
-    public void addKey(long chatId, Key key) {
-        storage.put(chatId, key);
+    public void addKey(long userId, Key key) {
+        storage.put(userId, key);
     }
 
-    public Key getByUserId(long chatId) {
-        return storage.get(chatId);
+    public Key getByUserId(long userId) {
+        return storage.get(userId);
     }
 
-    public void removeKey(long chatId) {
-        storage.remove(chatId);
+    public void removeKey(long userId) {
+        storage.remove(userId);
     }
 
-    public boolean containsConnectedKey(long chatId) {
-        return storage.containsKey(chatId);
+    public boolean containsConnectedKey(long userId) {
+        return storage.containsKey(userId);
     }
 }
