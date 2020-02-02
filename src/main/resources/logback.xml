@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- To enable JMX Management -->
+    <jmxConfigurator/>
+
+    <timestamp key="date" datePattern="yyyy-MM-dd"/>
+    <timestamp key="dateTime" datePattern="yyyy-MM-dd HH-mm"/>
+
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>./log/log-${date}.log</file>
+
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%date %-5level %logger{50}.%M:%L - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%class{50}.%M:%L) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="resultFile" class="ch.qos.logback.core.FileAppender">
+        <file>./results/results ${dateTime}.log</file>
+
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="result" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%magenta(%msg%n)</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="result" level="INFO" additivity="false">
+        <appender-ref ref="result"/>
+        <appender-ref ref="resultFile"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="file"/>
+        <appender-ref ref="console"/>
+    </root>
+</configuration>
