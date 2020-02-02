@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PreDestroy;
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -16,9 +18,12 @@ import java.util.stream.Collectors;
 
 @Repository
 public class PlayersRepository {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-uu HH-mm");
     private List<List<Player>> storage;
+    private LocalDateTime startTime;
 
     public PlayersRepository() throws IOException {
+        startTime = LocalDateTime.now();
         ObjectMapper objectMapper = new ObjectMapper();
         ClassPathResource resource = new ClassPathResource("players.json");
         InputStream inputStream = resource.getInputStream();
@@ -57,7 +62,11 @@ public class PlayersRepository {
 
     @PreDestroy
     public void writeResults() throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("results.txt", "UTF-8");
+        String timeString = startTime.format(DATE_TIME_FORMATTER);
+
+        new File("results").mkdir();
+
+        PrintWriter writer = new PrintWriter("results/results " + timeString + ".txt", "UTF-8");
         List<Player> players = getSimplePlayers();
         players.sort(Comparator.comparingInt(Player::getVotes).reversed());
 
