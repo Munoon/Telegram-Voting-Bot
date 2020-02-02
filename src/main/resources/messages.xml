@@ -9,6 +9,9 @@
         Что бы проголосовать просто введите ключ. Затем у вас появяться кнопки - участники голосования. Просто нажмите по одной из них, чтобы отдать свой голос.
     </entry>
 
+    <entry key="commands.results.notAdmin">Команда доступна только для администраторов бота</entry>
+    <entry key="commands.results.player">{0} - {1} голосов</entry>
+
     <entry key="messages.connectKey.notFound">Ключ не найден!</entry>
     <entry key="messages.connectKey.alreadyUsed">Ключ уже использован другим пользователем!</entry>
     <entry key="messages.connectKey.makeVote">Отлично, теперь проголосуйте!</entry>

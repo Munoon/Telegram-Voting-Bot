@@ -1,5 +1,6 @@
 package com.train4game.munoon;
 
+import com.train4game.munoon.commands.ResultsCommand;
 import com.train4game.munoon.commands.StartCommand;
 import com.train4game.munoon.messageParser.ConnectKeyParser;
 import com.train4game.munoon.messageParser.MessageParser;
@@ -37,6 +38,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
         this.telegramMessages = telegramMessages.createWrapper("bot");
 
         register(beanFactory.getBean(StartCommand.class));
+        register(beanFactory.getBean(ResultsCommand.class));
     }
 
     @Override
