@@ -2,15 +2,13 @@ package com.train4game.munoon.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Player {
-    private int id;
+    private final int id;
 
-    private String name;
+    private final String name;
 
     private int votes;
 

@@ -59,7 +59,7 @@ public class ConnectKeyParser implements MessageParser {
             return;
         }
 
-        log.info("Ask user to make vote in chat {}", message.getChatId());
+        log.info("Ask user to make vote in chat {}, key '{}'", message.getChatId(), key.getKey());
         telegramUserRepository.addKey(userId, key);
         sendMessage.setText(telegramMessages.getProperty("makeVote"));
         sendMessage.setReplyMarkup(playersButtons);

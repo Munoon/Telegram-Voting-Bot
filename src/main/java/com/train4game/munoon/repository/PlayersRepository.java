@@ -43,13 +43,12 @@ public class PlayersRepository {
     }
 
     public Player getPlayer(String name) {
-        for (List<Player> players : storage) {
-            for (Player player : players) {
-                if (player.getName().equals(name)) {
-                    return player;
-                }
+        for (Player player : getSimplePlayers()) {
+            if (player.getName().equals(name)) {
+                return player;
             }
         }
+
         return null;
     }
 

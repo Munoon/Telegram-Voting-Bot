@@ -45,10 +45,10 @@ public class VoteParser implements MessageParser {
         if (key.isUsed()) {
             key.getVotedFor().removeVote();
             sendMessage.setText(messages.getProperty("changeVote", player.getName()));
-            log.info("User in chat {} change vote to {}", message.getChatId(), player.getName());
+            log.info("User in chat {} change vote to {} using key '{}'", message.getChatId(), player.getName(), key.getKey());
         } else {
             sendMessage.setText(messages.getProperty("success", player.getName()));
-            log.info("User in chat {} voted for {}", message.getChatId(), player.getName());
+            log.info("User in chat {} voted for {} using key '{}'", message.getChatId(), player.getName(), key.getKey());
         }
 
         key.setUsed(true);
