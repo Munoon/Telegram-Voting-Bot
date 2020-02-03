@@ -5,7 +5,7 @@
 
     <groupId>com.train4game.munoon</groupId>
     <artifactId>Telegram-Voter-Bot</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -49,6 +49,7 @@
     </dependencies>
 
     <build>
+        <finalName>bot</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
