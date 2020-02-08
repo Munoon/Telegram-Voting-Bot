@@ -1,4 +1,7 @@
 # Telegram-Voting-Bot
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5bdf2233088b4f0db5548d337bf7c78c)](https://app.codacy.com/manual/Munoon/Telegram-Voting-Bot?utm_source=github.com&utm_medium=referral&utm_content=Munoon/Telegram-Voting-Bot&utm_campaign=Badge_Grade_Dashboard)
+
 Bot for voting using telegram
 
 ## How to launch
