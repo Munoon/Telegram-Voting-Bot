@@ -69,7 +69,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
                 log.info("Attempt to use bot in group chat {}", chat.getId());
                 sendMessage.setText(telegramMessages.getProperty("error.groupChat"));
                 execute(sendMessage);
-                return;
+                continue;
             }
 
             Integer userId = update.getMessage().getFrom().getId();
@@ -78,7 +78,7 @@ public class TelegramBot extends TelegramLongPollingCommandBot {
                 log.info("Enabled spam protection on chat {}", chat.getId());
                 sendMessage.setText(telegramMessages.getProperty("error.spam"));
                 execute(sendMessage);
-                return;
+                continue;
             }
 
             onUpdateReceived(update);

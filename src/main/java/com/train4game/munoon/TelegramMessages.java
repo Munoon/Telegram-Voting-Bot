@@ -49,13 +49,14 @@ public class TelegramMessages {
     }
 
     @AllArgsConstructor
-    private class Wrapper extends TelegramMessages {
+    private static class Wrapper extends TelegramMessages {
         private TelegramMessages telegramMessages;
         private String prefix;
 
         @Override
         public String getProperty(String key) {
-            return telegramMessages.getProperty(prefix + "." + key);
+            String message = telegramMessages.getProperty(prefix + "." + key);
+            return message == null ? telegramMessages.getProperty(key) : message;
         }
     }
 }
